@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>🤖 AI Code Tutor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Segoe+UI&display=swap');
+
+  /* Base styling */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 40px auto 80px;
+    background: #f5f7fa;
+    color: #222;
+    padding: 0 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #007acc;
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 1px 4px rgba(0,122,204,0.25);
+  }
+
+  /* Textarea */
+  textarea {
+    width: 100%;
+    min-height: 220px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid #d1d9e6;
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.05);
+    resize: vertical;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: #007acc;
+    box-shadow: 0 0 8px #007acc88;
+    background-color: #fefeff;
+  }
+
+  /* Radio buttons container */
+  .actions {
+    margin: 25px 0 30px;
+    text-align: center;
+    user-select: none;
+  }
+  .actions label {
+    margin: 0 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #444;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .actions input[type="radio"] {
+    margin-right: 8px;
+    accent-color: #007acc;
+    cursor: pointer;
+  }
+  .actions label:hover {
+    color: #007acc;
+  }
+
+  /* Submit button */
+  .btn-submit {
+    background: linear-gradient(135deg, #007acc 0%, #005fa3 100%);
+    color: white;
+    border: none;
+    padding: 14px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 122, 204, 0.35);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-submit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #005fa3 0%, #003f6b 100%);
+    box-shadow: 0 8px 20px rgba(0, 95, 163, 0.7);
+  }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Response container */
+  .response-container {
+    position: relative;
+    margin-top: 35px;
+  }
+  .response {
+    white-space: pre-wrap;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 24px 60px 24px 24px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    max-height: 420px;
+    overflow-y: auto;
+    box-shadow:
+      inset 0 0 20px rgba(255, 255, 255, 0.05),
+      0 8px 24px rgba(0,0,0,0.25);
+    line-height: 1.5;
+  }
+
+  /* Copy button */
+  .btn-copy {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background-color: #007acc;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,122,204,0.4);
+    transition: background-color 0.25s ease, transform 0.15s ease;
+    user-select: none;
+  }
+  .btn-copy:hover {
+    background-color: #005fa3;
+    transform: scale(1.05);
+  }
+  .btn-copy:active {
+    transform: scale(0.95);
+  }
+
+  /* Toast message */
+  .toast {
+    visibility: hidden;
+    min-width: 220px;
+    margin-left: -110px;
+    background-color: #007acc;
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 14px 28px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    font-weight: 700;
+    opacity: 0;
+    box-shadow: 0 6px 18px rgba(0,122,204,0.5);
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .toast.show {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Scrollbar styling for response */
+  .response::-webkit-scrollbar {
+    width: 8px;
+  }
+  .response::-webkit-scrollbar-track {
+    background: #2c2c2c;
+    border-radius: 12px;
+  }
+  .response::-webkit-scrollbar-thumb {
+    background: #007acc;
+    border-radius: 12px;
+  }
+  /* For Firefox */
+  .response {
+    scrollbar-width: thin;
+    scrollbar-color: #007acc #2c2c2c;
+  }
+</style>
+</head>
+<body>
+  <h1>🤖 AI Python Code Tutor</h1>
+  <form method="POST" id="code-form">
+    <textarea name="user_input" placeholder="Paste your code or prompt here...">{{ user_input }}</textarea>
+    <div class="actions">
+      <label><input type="radio" name="action" value="Explain Code" {% if selected_action == 'Explain Code' %}checked{% endif %}> Explain Code</label>
+      <label><input type="radio" name="action" value="Generate Code" {% if selected_action == 'Generate Code' %}checked{% endif %}> Generate Code</label>
+      <label><input type="radio" name="action" value="Debug Code" {% if selected_action == 'Debug Code' %}checked{% endif %}> Debug Code</label>
+    </div>
+    <button type="submit" class="btn-submit" id="submit-btn">Submit</button>
+  </form>
+
+  {% if response %}
+  <div class="response-container" aria-live="polite" aria-atomic="true">
+    <button class="btn-copy" id="copy-btn" title="Copy to clipboard">Copy</button>
+    <pre class="response" id="response-content">{{ response }}</pre>
+  </div>
+  {% endif %}
+
+  <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">Copied to clipboard!</div>
+
+<script>
+  const form = document.getElementById('code-form');
+  const submitBtn = document.getElementById('submit-btn');
+  form.addEventListener('submit', () => {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+  });
+
+  const copyBtn = document.getElementById('copy-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const text = document.getElementById('response-content').innerText;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast();
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    });
+  }
+
+  function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      if(successful) showToast();
+      else alert('Copy failed. Please copy manually.');
+    } catch (err) {
+      alert('Copy failed. Please copy manually.');
+    }
+    document.body.removeChild(textarea);
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+</script>
+</body>
+</html>
