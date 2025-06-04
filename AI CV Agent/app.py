@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import os
 import re
 from utils.parse_cv import extract_text_from_file
-from utils.rts_score import get_rts_score
+from utils.ats_score import get_ats_score
 from utils.improve_cv import suggest_improvements
 from utils.job_suggest import suggest_jobs
 
@@ -31,8 +31,8 @@ def index():
             cv_text = extract_text_from_file(filepath)
 
             result = ""
-            if action == 'rts':
-                result = get_rts_score(cv_text)
+            if action == 'ats':
+                result = get_ats_score(cv_text)
             elif action == 'improve':
                 result = suggest_improvements(cv_text)
             elif action == 'jobs':
