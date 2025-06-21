@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🚀 AI Blog Writer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #007bff;
+      --accent: #1d3557;
+      --bg: #f0f2f5;
+      --white: #ffffff;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #333;
+      padding: 30px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #007bff, #4e9eff);
+      padding: 30px 40px;
+      border-radius: var(--radius);
+      color: var(--white);
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 1000px;
+      background: var(--white);
+      padding: 30px 40px;
+      margin: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+      color: #444;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      background-color: #f8f9fa;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      outline: none;
+      background: #fff;
+    }
+
+    button {
+      background: var(--primary);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .section {
+      margin-top: 40px;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--accent);
+      border-left: 5px solid var(--primary);
+      padding-left: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 230px;
+      padding: 15px;
+      font-size: 15px;
+      line-height: 1.6;
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      background-color: #fdfdfd;
+      resize: vertical;
+      color: #333;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #28a745;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 5px;
+    }
+
+    .copy-btn:hover {
+      background-color: #218838;
+    }
+
+    #loading {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #007bff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 24px;
+      }
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧠 AI Blog Post Generator</h1>
+    <p class="tagline">Powered by Gemini + LangChain + Tavily</p>
+  </div>
+
+  <div class="container">
+    <form method="POST" onsubmit="showLoading()">
+      <label for="topic">Enter a Topic:</label>
+      <input type="text" id="topic" name="topic" placeholder="e.g. The Rise of AI in Healthcare" required>
+      <button type="submit">✍️ Generate Blog</button>
+    </form>
+
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Generating blog post... Please wait ⏳</p>
+    </div>
+
+    {% if result %}
+      <div class="section">
+        <div class="section-title">📝 Generated Blog Post</div>
+        <button class="copy-btn" onclick="copyText('blogPost')">📋 Copy</button>
+        <textarea id="blogPost" readonly>{{ result.blog_post }}</textarea>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🔍 SEO Title, Meta Description & Keywords</div>
+        <button class="copy-btn" onclick="copyText('seoText')">📋 Copy</button>
+        <textarea id="seoText" readonly>{{ result.seo }}</textarea>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function showLoading() {
+      document.getElementById('loading').style.display = 'block';
+    }
+
+    function copyText(id) {
+      const textArea = document.getElementById(id);
+      textArea.select();
+      textArea.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
+      alert("Copied to clipboard ✅");
+    }
+  </script>
+</body>
+</html>
