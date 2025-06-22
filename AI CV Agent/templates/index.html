@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI CV Assistant</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/14657/14657058.png" type="image/png" />
+  <style>
+    /* Reset & basics */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0f0ff, #f8faff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      animation: fadeIn 0.9s ease forwards;
+      color: #1e293b;
+      user-select: none;
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0; transform: translateY(15px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+
+    .app-wrapper {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      width: 100%;
+      max-width: 1250px;
+      padding: 10px;
+    }
+
+    /* Glassy neumorphism style */
+    .card, .result-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: saturate(180%) blur(18px);
+      border-radius: 24px;
+      box-shadow:
+        10px 10px 20px rgba(0, 0, 0, 0.06),
+        -10px -10px 20px rgba(255, 255, 255, 0.8);
+      padding: 36px 44px;
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover, .result-card:hover {
+      box-shadow:
+        12px 12px 24px rgba(0, 0, 0, 0.09),
+        -12px -12px 24px rgba(255, 255, 255, 0.9);
+    }
+
+    .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 36px;
+      user-select: text;
+    }
+    .header img {
+      width: 56px;
+      height: 56px;
+      filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
+    }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2563eb;
+      text-shadow: 1px 1px 3px rgba(37, 99, 235, 0.45);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    input[type="file"],
+    input[type="text"],
+    button {
+      padding: 16px 18px;
+      font-size: 17px;
+      border-radius: 14px;
+      border: none;
+      box-shadow:
+        inset 4px 4px 8px rgba(255,255,255,0.85),
+        inset -4px -4px 8px rgba(0, 102, 255, 0.12);
+      transition:
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+      background: #f0f7ff;
+      color: #1e293b;
+      font-weight: 600;
+      user-select: text;
+    }
+    input[type="file"] {
+      padding: 14px 16px;
+    }
+    input[type="text"]::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+    input[type="file"]:focus,
+    input[type="text"]:focus {
+      outline: none;
+      box-shadow:
+        0 0 12px 4px rgba(37, 99, 235, 0.5),
+        inset 2px 2px 6px rgba(255, 255, 255, 0.9);
+      background: #e0f0ff;
+    }
+
+    button {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow:
+        0 5px 12px rgba(37, 99, 235, 0.45);
+      user-select: none;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      box-shadow:
+        0 8px 18px rgba(37, 99, 235, 0.75);
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .loader {
+      display: none;
+      margin-top: 26px;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Custom spinner */
+    .loader svg {
+      height: 48px;
+      width: 48px;
+      stroke: #2563eb;
+      animation: spin 1.3s linear infinite;
+      margin: 0 auto 8px;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    .loader p {
+      color: #64748b;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .result-card {
+      flex: 1.3;
+      max-height: 650px;
+      overflow-y: auto;
+      user-select: text;
+      color: #334155;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 15.5px;
+      line-height: 1.5;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .result-card h2 {
+      color: #2563eb;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(37, 99, 235, 0.3);
+    }
+    .result-card p {
+      color: #64748b;
+      font-style: italic;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 950px) {
+      .app-wrapper {
+        flex-direction: column;
+      }
+      .card, .result-card {
+        width: 100%;
+        max-height: none;
+        box-shadow:
+          6px 6px 14px rgba(0,0,0,0.07),
+          -6px -6px 14px rgba(255,255,255,0.8);
+      }
+      .result-card {
+        margin-top: 32px;
+        border-radius: 18px;
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper" role="main" aria-label="AI CV Assistant Application">
+    <!-- Left panel - input -->
+    <section class="card" aria-labelledby="form-header">
+      <div class="header">
+        <img src="https://cdn-icons-png.flaticon.com/512/14657/14657058.png" alt="AI Assistant Icon" />
+        <h1 id="form-header">AI CV Assistant</h1>
+      </div>
+      <form method="POST" enctype="multipart/form-data" onsubmit="showLoader()" aria-describedby="form-instructions">
+        <input type="file" name="cv" required aria-required="true" aria-label="Upload CV file" />
+        <input type="text" name="job_pref" placeholder="Job preferences (optional)" aria-label="Job preferences" />
+        <button type="submit" name="action" value="ats" aria-label="Get ATS Score">🎯 Get ATS Score</button>
+        <button type="submit" name="action" value="improve" aria-label="Suggest Improvements">🛠️ Suggest Improvements</button>
+        <button type="submit" name="action" value="jobs" aria-label="Suggest Jobs">💼 Suggest Jobs</button>
+      </form>
+      <div class="loader" id="loader" role="status" aria-live="polite" aria-busy="true" aria-label="Loading">
+        <svg viewBox="0 0 50 50" fill="none" stroke-width="4" stroke-linecap="round">
+          <circle cx="25" cy="25" r="20" stroke-opacity="0.2" />
+          <path d="M45 25a20 20 0 0 1-20 20" />
+        </svg>
+        <p>Processing, please wait...</p>
+      </div>
+    </section>
+
+    <!-- Right panel - output -->
+    <section class="result-card" aria-live="polite" aria-atomic="true" aria-relevant="additions removals" tabindex="0">
+      {% if result %}
+        <h2>🧾 Result</h2>
+        <div class="result-content">{{ result }}</div>
+      {% else %}
+        <h2>🧾 Output will appear here</h2>
+        <p>Submit your CV to see results.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  <script>
+    function showLoader() {
+      const loader = document.getElementById("loader");
+      loader.style.display = "block";
+    }
+  </script>
+</body>
+</html>
