@@ -35,3 +35,5 @@ Just upload your dataset and get instant charts, heatmaps, KPIs, and download op
 ![Column Summary](5.png)
 
 ---
+For App Preview click [Here](https://huggingface.co/spaces/ahmadsanafarooq/Dashboard_Creation)
+---
