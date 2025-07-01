@@ -20,18 +20,20 @@ Just upload your dataset and get instant charts, heatmaps, KPIs, and download op
 ## 📸 Screenshots
 
 ### 🧾 CSV Preview
-![Preview]('E:\DS Material\Data\Data-Science-Machine-Learning-Nodebook\GEN AI\CSV Data Dashboard\1.png')
+![Preview](1.png)
 
 ### 📈 KPI Metrics + Correlation Heatmap
-![Metrics](images/image2.png)
+![Metrics](2.png)
 
 ### 📊 Interactive Charts
-![Charts](images/image3.png)
+![Charts](3.png)
 
 ### 📅 Time Series & Date Filters
-![Date Filtering](images/image4.png)
+![Date Filtering](4.png)
 
 ### 🔍 Column Summary + Download Filtered CSV
-![Column Summary](images/image5.png)
+![Column Summary](5.png)
 
+---
+For App Preview click [Here](https://huggingface.co/spaces/ahmadsanafarooq/Dashboard_Creation)
 ---
