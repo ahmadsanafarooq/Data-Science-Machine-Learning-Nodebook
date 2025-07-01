@@ -23,15 +23,15 @@ Just upload your dataset and get instant charts, heatmaps, KPIs, and download op
 ![Preview](1.png)
 
 ### 📈 KPI Metrics + Correlation Heatmap
-![Metrics](images/image2.png)
+![Metrics](images/2.png)
 
 ### 📊 Interactive Charts
-![Charts](images/image3.png)
+![Charts](images/3.png)
 
 ### 📅 Time Series & Date Filters
-![Date Filtering](images/image4.png)
+![Date Filtering](images/4.png)
 
 ### 🔍 Column Summary + Download Filtered CSV
-![Column Summary](images/image5.png)
+![Column Summary](images/5.png)
 
 ---
