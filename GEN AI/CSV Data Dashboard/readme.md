@@ -20,7 +20,7 @@ Just upload your dataset and get instant charts, heatmaps, KPIs, and download op
 ## 📸 Screenshots
 
 ### 🧾 CSV Preview
-![Preview](images/image1.png)
+![Preview](1.png)
 
 ### 📈 KPI Metrics + Correlation Heatmap
 ![Metrics](images/image2.png)
