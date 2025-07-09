@@ -1,0 +1,8 @@
+streamlit
+openai-whisper
+transformers
+torch
+sentencepiece
+fpdf
+wordcloud
+matplotlib
