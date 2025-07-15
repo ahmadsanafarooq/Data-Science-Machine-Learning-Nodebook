@@ -1,0 +1,15 @@
+langchain
+langchain-groq
+langchain-community
+langchain-huggingface
+gradio
+chromadb
+sentence-transformers
+PyPDF2
+pypdf
+python-dotenv
+transformers
+torch
+numpy
+pandas
+requests
