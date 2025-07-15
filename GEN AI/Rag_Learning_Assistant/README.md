@@ -196,6 +196,5 @@ Feel free to use, modify, and contribute.
 ## 🔗 Connect
 
 - 🌐 GitHub: [@ahmadsanafarooq](https://github.com/ahmadsanafarooq)
-- 📄 LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/ahmadsanafarooq)
-
+- 📄 LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/ahmad-sana-farooq/)
 ---
