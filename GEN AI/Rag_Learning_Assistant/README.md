@@ -1,36 +1,81 @@
+# 🎓 RAG-Based Learning & Code Assistant with Evaluation
 
-# 🎓 RAG-Based Learning & Code Assistant
+An advanced Retrieval-Augmented Generation (RAG) application that integrates **LangChain**, **Groq’s LLaMA 3**, **ChromaDB**, and **Gradio** to assist:
 
-An intelligent Retrieval-Augmented Generation (RAG) application that uses **LangChain**, **Groq's LLaMA 3**, **ChromaDB**, and **Gradio** to assist:
+- 📚 **Students** — get smart help using uploaded learning materials
+- 💻 **Developers** — ask questions based on documentation or code
 
-- 📚 **Students** — get contextual help using uploaded learning materials.
-- 💻 **Developers** — understand and query code documentation effectively.
-
-With support for `.pdf`, `.txt`, `.md`, `.py`, `.js`, and `.json` files, this app enables you to interact with your documents through a sleek **Gradio** interface.
+⚡ Now includes **retrieval performance evaluation**, comparison to standard RAG setups, and real-world use case examples.
 
 ---
 
 ## ✨ Key Features
 
-- 📂 Upload course materials or code documentation
-- 🤖 Ask questions and get smart, context-aware responses
-- 🧠 Powered by **LLaMA 3 (Groq API)** for fast, accurate answers
-- 🧱 Uses **ChromaDB** for persistent document retrieval
-- 🔄 Falls back to **TF-IDF** if transformer embeddings fail
-- 💬 Dual chat tabs: **Learning Tutor** & **Code Helper**
+- 📂 Upload documents for contextual Q&A (PDF, TXT, MD, Code files)
+- 💬 Chat with Learning or Code Assistant using Gradio UI
+- 🧠 Powered by **Groq LLaMA 3** for lightning-fast, accurate responses
+- 🧱 Vector store via **ChromaDB**, fallback to **TF-IDF**
+- 🔍 NEW: Evaluate performance with precision, recall & MRR
+- 📊 Benchmark tab for analyzing your retrieval pipeline
 
 ---
 
 ## 🧠 How It Works
 
-1. Upload your files → PDF, TXT, MD, code files.
-2. Files are split into chunks using LangChain's text splitter.
-3. Chunks are embedded using HuggingFace or TF-IDF (fallback).
-4. Embeddings are stored in **ChromaDB**.
-5. When you ask a question:
-    - Top chunks are retrieved.
-    - The query + context is sent to **LLaMA 3 via Groq API**.
-    - A tailored answer is returned through Gradio.
+1. Upload documents → chunked via LangChain
+2. Text is embedded using HuggingFace (or TF-IDF fallback)
+3. Stored persistently in ChromaDB (separately for each assistant)
+4. When you ask a question:
+   - Retrieves top-k relevant chunks
+   - Sends query + context to **Groq LLaMA 3**
+   - Answer is streamed via Gradio UI
+
+---
+
+## 📊 Retrieval Performance Evaluation
+
+Evaluate your assistant’s retrieval quality using:
+
+- ✅ **Precision@k**: Measures accuracy of top-k retrievals
+- ✅ **Recall@k**: Measures how many relevant answers are retrieved
+- ✅ **MRR** (Mean Reciprocal Rank): Measures ranking quality
+
+🔁 Evaluation File Format (Upload as `.json`):
+```json
+[
+  {
+    "question": "What is overfitting in ML?",
+    "keywords": ["overfitting", "training error"]
+  },
+  {
+    "question": "Explain BFS vs DFS",
+    "keywords": ["breadth", "depth", "graph"]
+  }
+]
+```
+
+📝 This file must be uploaded via the **Evaluation Bench** tab.
+
+---
+
+## 🔬 Comparison to Traditional RAG
+
+| Feature              | This App             | Traditional RAG    |
+|----------------------|----------------------|--------------------|
+| Vector Store         | ChromaDB (persistent)| In-memory/None     |
+| Evaluation Bench     | ✅ Yes               | ❌ No               |
+| Assistant Modes      | Learning + Code      | Generic only       |
+| TF-IDF Fallback      | ✅ Yes               | ❌ No               |
+| Embedding Sources    | HuggingFace / TF-IDF | Usually HuggingFace|
+
+---
+
+## 🌍 Real-World Use Cases
+
+- 👨‍🏫 Teachers uploading course syllabi for student Q&A
+- 👩‍💻 Developers analyzing API docs to answer usage questions
+- 📘 Students uploading textbooks or lecture notes for revision help
+- 📈 Evaluating retrieval performance for different embedding models
 
 ---
 
@@ -43,7 +88,7 @@ With support for `.pdf`, `.txt`, `.md`, `.py`, `.js`, and `.json` files, this ap
 | Embeddings     | HuggingFace models / TF-IDF fallback    |
 | Vector Store   | [ChromaDB](https://www.trychroma.com/)  |
 | Interface      | [Gradio](https://www.gradio.app/)       |
-| Utilities      | Python, NumPy, Scikit-learn, dotenv     |
+| Evaluation     | Scikit-learn + custom logic             |
 
 ---
 
@@ -51,123 +96,91 @@ With support for `.pdf`, `.txt`, `.md`, `.py`, `.js`, and `.json` files, this ap
 
 ```
 Rag_Learning_Assistant/
-├── app.py                  # Main application file
-├── .env                    # Environment variables file (API key)
-├── chroma_learning_db/     # Persistent vector DB for learning assistant
-├── chroma_code_db/         # Persistent vector DB for code assistant
-└── requirements.txt        # Python dependencies
-
+├── app.py                  # Main app
+├── .env                    # API key file
+├── chroma_learning_db/     # Chroma vector DB (learning)
+├── chroma_code_db/         # Chroma vector DB (code)
+├── evaluation/             # Sample JSON evaluation files
+├── requirements.txt        # Dependencies
 ```
 
 ---
 
 ## ⚙️ Setup Instructions
 
-### 1. Clone the Repository
-
+### 1. Clone Repo
 ```bash
 git clone https://github.com/ahmadsanafarooq/Data-Science-Machine-Learning-Nodebook.git
 cd Data-Science-Machine-Learning-Nodebook/GEN\ AI/Rag_Learning_Assistant
 ```
 
 ### 2. Create Virtual Environment
-
 ```bash
 python -m venv .env
 source .env/bin/activate   # Windows: .env\Scripts\activate
 ```
 
-### 3. Install Dependencies
-
+### 3. Install Requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Set Up API Key
-
-Create a `.env` file with your Groq API key:
-
+### 4. Set Groq API Key
+```bash
+echo "GROQ_API_KEY=your_key_here" > .env
 ```
-GROQ_API_KEY=your_groq_api_key_here
-```
+Get a free key from: https://console.groq.com/
 
-You can get a free key from: https://console.groq.com/
-
-### 5. Run the Application
-
+### 5. Launch the App
 ```bash
 python app.py
 ```
-
-App will launch at: [http://localhost:7860](http://localhost:7860)
-
----
-
-## 🖼️ UI Overview
-
-### 📚 Learning Tutor Tab
-
-- Upload PDFs or notes
-- Ask academic questions
-- Get detailed, encouraging responses
-
-### 💻 Code Documentation Helper Tab
-
-- Upload code files or API docs
-- Ask coding-related questions
-- Get technical answers with code examples
+Visit [http://localhost:7860](http://localhost:7860)
 
 ---
 
-## 🔧 Supported File Types
+## 🖼️ Interface Overview
 
-- `.pdf`, `.txt`, `.md` — for both assistants
-- `.py`, `.js`, `.json` — for **Code Assistant** only
+### 📚 Learning Tutor
+- Upload `.pdf`, `.txt`, or `.md`
+- Ask theory-based questions
+- Receive rich, structured answers
 
----
+### 💻 Code Assistant
+- Upload `.py`, `.js`, `.json` files
+- Ask code-related queries
+- Get explanations, snippets, etc.
 
-## 🧪 Example Queries
-
-### Learning Tutor:
-> _"Explain the bias-variance tradeoff in machine learning."_
-
-→ Responds with a simplified explanation, examples, and source files.
-
-### Code Assistant:
-> _"How do I handle token-based authentication in this API?"_
-
-→ Responds with relevant documentation snippets, code, and tips.
+### 📊 Evaluation Bench
+- Upload `.json` with questions/keywords
+- Choose assistant mode
+- View precision, recall, MRR, config summary
 
 ---
 
-## 💡 Future Enhancements
+## 📎 Supported File Types
 
-- 🔒 User authentication and role-based access
-- ☁️ Deployment to Hugging Face Spaces or Streamlit Cloud
-- 📈 Add usage analytics and question logs
-- 🧾 Support Word/Excel document ingestion
+| Assistant        | Accepted File Types           |
+|------------------|-------------------------------|
+| Learning Tutor   | `.pdf`, `.txt`, `.md`         |
+| Code Assistant   | `.py`, `.js`, `.json`         |
+| Evaluation Bench | `.json`                       |
 
 ---
 
-## ✅ Requirements
+## 💬 Sample Queries
 
-See `requirements.txt` (auto-generated from your `app.py`):
+**Learning Tutor**  
+> _"What is gradient descent in machine learning?"_
 
-```txt
-gradio
-langchain
-langchain-community
-langchain-groq
-langchain-huggingface
-chromadb
-python-dotenv
-scikit-learn
-numpy
-PyPDF2
-```
+**Code Assistant**  
+> _"What does this Flask route do in app.py?"_
 
-Install with:
+---
 
+
+
+Install via:
 ```bash
 pip install -r requirements.txt
 ```
@@ -176,15 +189,14 @@ pip install -r requirements.txt
 
 ## 🛡 License
 
-This project is licensed under the **MIT License**.  
-Feel free to use, modify, and contribute.
+MIT License — free to use, modify, and distribute.
 
 ---
 
 ## 🙌 Credits
 
 - 👨‍💻 Developed by [Ahmad Sana Farooq](https://github.com/ahmadsanafarooq)
-- 🧠 Built using:
+- 💡 Powered by:
   - [LangChain](https://www.langchain.com/)
   - [Groq API](https://console.groq.com/)
   - [ChromaDB](https://www.trychroma.com/)
@@ -197,4 +209,3 @@ Feel free to use, modify, and contribute.
 
 - 🌐 GitHub: [@ahmadsanafarooq](https://github.com/ahmadsanafarooq)
 - 📄 LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/ahmad-sana-farooq/)
----
