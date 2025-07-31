@@ -112,7 +112,7 @@ GOOGLE_API_KEY="YOUR_GOOGLE_API_KEY_HERE"
 ### 4. Run the App
 
 ```bash
-python3 app.py
+python app.py
 ```
 
 Open the provided local URL (usually http://127.0.0.1:7860) in your browser.
@@ -134,7 +134,7 @@ Open the provided local URL (usually http://127.0.0.1:7860) in your browser.
 
 1. **Launch** the app:
    ```bash
-   python3 app.py
+   python app.py
    ```
 
 2. **Enter a Topic**  
