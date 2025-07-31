@@ -1,0 +1,9 @@
+langchain
+langchain-google-genai
+langchain-community
+python-dotenv
+gradio
+beautifulsoup4
+requests
+ddgs
+duckduckgo-search
