@@ -121,7 +121,7 @@ GOOGLE_API_KEY="YOUR_GOOGLE_API_KEY_HERE"
 
 ### 4. Run the App
 ```bash
-python3 app.py
+python app.py
 ```
 Open [http://127.0.0.1:7860](http://127.0.0.1:7860).
 
@@ -149,7 +149,7 @@ pytest
 
 1. Launch the app:  
    ```bash
-   python3 app.py
+   python app.py
    ```
 
 2. Enter a Topic  
