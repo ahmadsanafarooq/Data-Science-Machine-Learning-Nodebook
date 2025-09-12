@@ -55,8 +55,8 @@ research_report.md
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/multi-agent-research-assistant.git
-   cd multi-agent-research-assistant
+   git clone https://github.com/ahmadsanafarooq/Data-Science-Machine-Learning-Nodebook.git
+   cd "GEN AI/Multiagent research system"
    ```
 
 2. Create and activate a virtual environment:
